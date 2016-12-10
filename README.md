@@ -15,7 +15,14 @@
 
 #### 前處理
 
-輸出欄位: 經度, 緯度, PM 2.5 濃度, timestamp
+輸出欄位
+
+| 欄位名稱 | 型態/格式 |
+| --- | --- |
+| 經度 | Float |
+| 緯度 | Float |
+| PM 2.5 濃度 | Float |
+| Timestamp | YYYY/MM/DD HH:mm |
 
 ### 發電廠 Data
 
