@@ -28,5 +28,7 @@
 ### 發電廠資料
 
 [台電系統(含外購電力)各機組發電量即時資訊](https://sheethub.com/data.gov.tw/政府資料開放平臺資料集清單/uri/4080)
+
 [水火力發電廠位置及機組設備](http://data.gov.tw/node/8934)
+
 [核能發電廠位置及機組設備](http://data.gov.tw/node/10858)
