@@ -6,7 +6,6 @@
 
 | 發電機編號 | 對 PM 2.5 影響程度(%) |
 | --- | --- |
-| 核一#1 | 79% | 
 | 核二#1 | 56 % |
 
 ## 工作項目
@@ -30,7 +29,14 @@
 
 #### 前處理
 
-## References
+## 參考資料
+
+### LASS
+
+- [LASS - README](https://lass.hackpad.com/LASS-README-DtZ5T6DXLbu)
+- [LASS - Data specification](https://lass.hackpad.com/LASS-Data-specification-1dYpwINtH8R)
+- [How to get data log from server](https://lass.hackpad.com/How-to-get-data-log-from-server-Ztu9mpUsGL9)
+- [Access by browser](ftp://gpssensor.ddns.net:2121/)
 
 ### 發電廠資料
 
