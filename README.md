@@ -13,7 +13,7 @@
 
 ### Dataset
 
-The whole daatset could be found on the [official site](ftp://gpssensor.ddns.net:2121/)
+The whole daatset could be found on the [official site](ftp://gpssensor.ddns.net:2121/).
 
 ### Sample Dataset
 
@@ -40,6 +40,12 @@ We define the target output format to be `.csv` file with header:
 | --- | --- | --- | --- |
 | 120.5678 | 21.5566 | 71 | 2016/12/25 19:40
 | 120.5678 | 21.5566 | 68 | 2016/12/25 19:50
+
+#### Usage
+
+```
+/src/pm25 $ python logToCsv.py [../../data/pm25/logs] [../../data/pm25/csvs]
+```
 
 ## Part 2. Power Generator Data
 
