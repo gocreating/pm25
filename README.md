@@ -4,6 +4,8 @@
 
 ## 目標輸出結果
 
+輸出指定時間範圍內台灣所有核能及火力發電機對應 PM 2.5 濃度之影響程度
+
 | 發電機名稱 | 對 PM 2.5 影響程度(%) |
 | --- | --- |
 | 核一#1 | 79% |
@@ -60,6 +62,8 @@ We define the target output format to be `.csv` file with header:
 /src/pm25 $ python extractTaiwanCsv.py [../../data/pm25/twCsvs]
 ```
 
+Extract entries near Taiwan.
+
 ## Part 2. Power Generator Data
 
 ### Dataset
@@ -84,9 +88,40 @@ We manually searched out the longitudes and latitudes of generators and merge th
 | load | Float | The working load of generators in percentage |
 | timestamp | String | Timestamp with format `YYYY/MM/DD HH:mm`, and the `mm` part can only be `10`, `20`, `30`, `40` and `50` |
 
-## Part 3. Merging Data
+```
+$ python /src/power/populateGeneratorPm25.py [r1=0.1] [r2=0.5]
+```
 
-## Part 4. Algorithm
+Calculate weighted pm2.5 concentrations Gaussian distribution model.
+
+| Field  | Data Type | Description
+| --- | --- | --- |
+| name | String | The identifier of generators |
+| load | Float | The working load of generators in percentage |
+| pm25InR1 | Float | weighted pm25 concentration inside radius R1
+| pm25InR2 | Float | weighted pm25 concentration inside radius R2
+| pm25Computed | Float | pm25InR2 - pm25InR1
+| timestamp | String | Timestamp with format `YYYY/MM/DD HH:mm`, and the `mm` part can only be `10`, `20`, `30`, `40` and `50` |
+
+## Part 3. Algorithm
+
+```
+file = OPEN('path/to/output')
+FOR EACH name IN generator:
+  model = LinearRegression.train(load, pm25Computed)
+  influence = model.slope
+  file.write(name, influence)
+```
+
+### Usage
+
+```
+/src $ python /src/joinCsv.py [../data/pm25/twCsvs] [../data/joined.csv]
+```
+
+1. Go through every .csv files inside twCsvs directory
+2. Join `/data/pm25/twCsvs/*.csv` with `/data/power/raw.csv` using timestamp.
+3. Save all entries into single file `/data/joined.csv`
 
 ## Reference
 
