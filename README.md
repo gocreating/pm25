@@ -40,15 +40,15 @@ We define the target output format to be `.csv` file with header:
 > #### Example
 > /data/pm25/csvs/2016-12-20.csv
 >
-| longitude  | latitude | pm25 | timestamp |
+| latitude | longitude | pm25 | timestamp |
 | --- | --- | --- | --- |
-| 120.5678 | 21.5566 | 71 | 2016/12/25 19:40
-| 120.5678 | 21.5566 | 68 | 2016/12/25 19:50
+| 21.5566 | 120.5678 | 71 | 2016/12/25 19:40
+| 21.5566 | 120.5678 | 68 | 2016/12/25 19:50
 
 #### Usage
 
 ```
-/src/pm25 $ python logToCsv.py [../../data/pm25/logs] [../../data/pm25/csvs] [-v]
+/src/pm25 $ python preprocess_LASS.py [../../data/pm25/logs] [../../data/pm25/csvs] [-v]
 ```
 
 > `-v` switch allows error reporting
