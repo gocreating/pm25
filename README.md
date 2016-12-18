@@ -48,8 +48,10 @@ We define the target output format to be `.csv` file with header:
 #### Usage
 
 ```
-/src/pm25 $ python logToCsv.py [../../data/pm25/logs] [../../data/pm25/csvs]
+/src/pm25 $ python logToCsv.py [../../data/pm25/logs] [../../data/pm25/csvs] [-v]
 ```
+
+> `-v` switch allows error reporting
 
 1. Turn log files into csv files
 2. Drop data when any following rules is matched:
@@ -59,7 +61,7 @@ We define the target output format to be `.csv` file with header:
   - Error datetime
 
 ```
-/src/pm25 $ python extractTaiwanCsv.py [../../data/pm25/twCsvs]
+/src/pm25 $ python extractTaiwanCsv.py [../../data/pm25/reducedCsvs]
 ```
 
 Extract entries near Taiwan.
@@ -116,12 +118,8 @@ FOR EACH name IN generator:
 ### Usage
 
 ```
-/src $ python /src/joinCsv.py [../data/pm25/twCsvs] [../data/joined.csv]
+/src $ python /src/compute.py
 ```
-
-1. Go through every .csv files inside twCsvs directory
-2. Join `/data/pm25/twCsvs/*.csv` with `/data/power/raw.csv` using timestamp.
-3. Save all entries into single file `/data/joined.csv`
 
 ## Reference
 
