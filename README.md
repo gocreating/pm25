@@ -33,9 +33,9 @@ We define the target output format to be `.csv` file with header:
 | longitude | Float | - |
 | latitude | Float | - |
 | pm25 | Float | The concentration of PM2.5 in μg/m<sup>3</sup> |
-| timestamp | String | Timestamp with format `YYYY/MM/DD HH:mm`, and the `mm` part can only be `10`, `20`, `30`, `40`, `50` |
+| timestamp | String | Timestamp with format `YYYY/MM/DD HH:mm`, and the `mm` part can only be `10`, `20`, `30`, `40` and `50` |
 
-> #### Example
+> #### example.csv
 | longitude  | latitude | pm25 | timestamp |
 | --- | --- | --- | --- |
 | 120.5678 | 21.5566 | 71 | 2016/12/25 19:40
