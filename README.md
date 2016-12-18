@@ -25,6 +25,7 @@ The whole daatset could be found on the [official site](ftp://gpssensor.ddns.net
 - <ftp://gpssensor.ddns.net:2121/data.log-20161215.gz>
 - <ftp://gpssensor.ddns.net:2121/data.log-20161216.gz>
 - <ftp://gpssensor.ddns.net:2121/data.log-20161217.gz>
+- <ftp://gpssensor.ddns.net:2121/data.log-20161218.gz>
 
 ### Preprocessing
 
@@ -35,7 +36,7 @@ We define the target output format to be `.csv` file with header:
 | latitude | Float | - |
 | longitude | Float | - |
 | pm25 | Float | The concentration of PM2.5 in μg/m<sup>3</sup> |
-| timestamp | String | Timestamp with format `YYYY/MM/DD HH:mm`, and the `mm` part can only be `10`, `20`, `30`, `40` and `50` |
+| timestamp | String | Timestamp with format `YYYY/MM/DD HH:mm`, and the `mm` part can only be `00`, `10`, `20`, `30`, `40` and `50` |
 
 > #### Example
 > /data/pm25/csvs/2016-12-20.csv
@@ -88,7 +89,7 @@ We manually searched out the longitudes and latitudes of generators and merge th
 | latitude | Float | - |
 | longitude | Float | - |
 | load | Float | The working load of generators in percentage |
-| timestamp | String | Timestamp with format `YYYY/MM/DD HH:mm`, and the `mm` part can only be `10`, `20`, `30`, `40` and `50` |
+| timestamp | String | Timestamp with format `YYYY/MM/DD HH:mm`, and the `mm` part can only be `00`, `10`, `20`, `30`, `40` and `50` |
 
 ```
 $ python /src/power/populateGeneratorPm25.py [r1=0.1] [r2=0.5]
@@ -103,7 +104,7 @@ Calculate weighted pm2.5 concentrations Gaussian distribution model.
 | pm25InR1 | Float | weighted pm25 concentration inside radius R1
 | pm25InR2 | Float | weighted pm25 concentration inside radius R2
 | pm25Computed | Float | pm25InR2 - pm25InR1
-| timestamp | String | Timestamp with format `YYYY/MM/DD HH:mm`, and the `mm` part can only be `10`, `20`, `30`, `40` and `50` |
+| timestamp | String | Timestamp with format `YYYY/MM/DD HH:mm`, and the `mm` part can only be `00`, `10`, `20`, `30`, `40` and `50` |
 
 ## Part 3. Algorithm
 
