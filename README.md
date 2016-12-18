@@ -4,7 +4,7 @@
 
 ## 目標輸出結果
 
-| 發電機編號 | 對 PM 2.5 影響程度(%) |
+| 發電機名稱 | 對 PM 2.5 影響程度(%) |
 | --- | --- |
 | 核一#1 | 79% |
 | 核二#1 | 56 % |
@@ -30,12 +30,14 @@ We define the target output format to be `.csv` file with header:
 
 | Field  | Data Type | Description
 | --- | --- | --- |
-| longitude | Float | - |
 | latitude | Float | - |
+| longitude | Float | - |
 | pm25 | Float | The concentration of PM2.5 in μg/m<sup>3</sup> |
 | timestamp | String | Timestamp with format `YYYY/MM/DD HH:mm`, and the `mm` part can only be `10`, `20`, `30`, `40` and `50` |
 
-> #### example.csv
+> #### Example
+> /data/pm25/csvs/2016-12-20.csv
+>
 | longitude  | latitude | pm25 | timestamp |
 | --- | --- | --- | --- |
 | 120.5678 | 21.5566 | 71 | 2016/12/25 19:40
@@ -47,6 +49,17 @@ We define the target output format to be `.csv` file with header:
 /src/pm25 $ python logToCsv.py [../../data/pm25/logs] [../../data/pm25/csvs]
 ```
 
+1. Turn log files into csv files
+2. Drop data when any following rules is matched:
+  - Empty data
+  - NA, NAN, none data
+  - Any data with zero value
+  - Error datetime
+
+```
+/src/pm25 $ python extractTaiwanCsv.py [../../data/pm25/twCsvs]
+```
+
 ## Part 2. Power Generator Data
 
 ### Dataset
@@ -55,7 +68,25 @@ We define the target output format to be `.csv` file with header:
 - [水火力發電廠位置及機組設備](http://data.gov.tw/node/8934)
 - [核能發電廠位置及機組設備](http://data.gov.tw/node/10858)
 
+### Collecting
+
+> To Be Documented
+
 ### Preprocessing
+
+We manually searched out the longitudes and latitudes of generators and merge them with open data to give [`/data/power/raw.csv`](https://github.com/gocreating/pm25/blob/master/data/power/raw.csv) with following header:
+
+| Field  | Data Type | Description
+| --- | --- | --- |
+| name | String | The identifier of generators |
+| latitude | Float | - |
+| longitude | Float | - |
+| load | Float | The working load of generators in percentage |
+| timestamp | String | Timestamp with format `YYYY/MM/DD HH:mm`, and the `mm` part can only be `10`, `20`, `30`, `40` and `50` |
+
+## Part 3. Merging Data
+
+## Part 4. Algorithm
 
 ## Reference
 
