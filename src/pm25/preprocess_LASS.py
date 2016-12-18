@@ -84,6 +84,7 @@ def preProcessLogFile(logFileName, csvFolderPath, debugLogFile):
 					
 					try:
 						logDateTime = datetime.datetime.strptime('%s %s' % (attrDict['date'], attrDict['time']), "%Y-%m-%d %H:%M:%S")
+						logDateTime = logDateTime.replace(minute = logDateTime.minute/10*10)
 						
 						CSV_FileName = '%s/%s.csv' % (csvFolderPath, attrDict['date'])
 						
@@ -94,7 +95,7 @@ def preProcessLogFile(logFileName, csvFolderPath, debugLogFile):
 							outCSVFile = open(CSV_FileName, 'w')
 							outCSVFile.write('latitude,longitude,pm25,timestamp\n')
 							csvFileDict[CSV_FileName] = outCSVFile
-
+						
 						outCSVFile.write('%s,%s,%f,%s\n' % (attrDict['gps_lat'], attrDict['gps_lon'], PM25, logDateTime.strftime("%Y/%m/%d %H:%M")))
 						dataCounter += 1
 						
