@@ -1,39 +1,27 @@
-#coding=utf-8
+# -*- coding: utf-8 -*-
 
-from collections import defaultdict
-import MySQLdb
-import time
 import sys
+import glob
+import os
+import time
+import datetime
 
-# log data list
+csvFileDict = dict()
 
-FILE_NAMES = [
-	'./data.log-20161212',
-	'./data.log-20161213',
-	'./data.log-20161214',
-	'./data.log-20161215',
-	'./data.log-20161216',
-	'./data.log-20161217'
-]
-
-#FILE_NAMES = [ './data.log-20160918' ]
-
-LOG_FILENAME = 'preprocessor_log_%s.log' % (time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()))
-
-# MySQL connect
-conn = MySQLdb.connect(host="localhost",user="LiYu",passwd="password",db="datamining",charset='utf8')
-cursor = conn.cursor()
-
-outLogFile = open(LOG_FILENAME, 'w')
-
-for fileName in FILE_NAMES:
+def preProcessLogFile(logFileName, csvFolderPath, debugLogFile):
+	fileName = logFileName.split('\\')[1]
+	print('Reading: <' + fileName + '>')
+	
 	lineCounter = 0
 	dataCounter = 0
+	filteredCounter = 0
 	errCounter = 0
-	rawlogfile = open(fileName, "r")
+	
+	rawlogfile = open(logFileName, "r")
 	
 	print '=================== Start parsing file: %s ===================' % (fileName)
-	outLogFile.write('=================== Start parsing file: %s ===================\n\n' % (fileName))
+	if debugLogFile is not None:
+		debugLogFile.write('=================== Start parsing file: %s ===================\n\n' % (fileName))
 	
 	startTime = time.time()
 	
@@ -51,11 +39,9 @@ for fileName in FILE_NAMES:
 		
 			# Split attributes
 			attrs = line.split("|")
-			dict = {'device_msg':attrs[0]}
-
-			#print attrs[0]
+			attrDict = {'device_msg':attrs[0]}
 			
-			# Useful (data contained) line
+			# Data contained line
 			if len(attrs) != 1:
 				for attr in attrs[1:]:
 				
@@ -70,57 +56,127 @@ for fileName in FILE_NAMES:
 							if len(	splitedAttr) != 1 and \
 									splitedAttr[1].lower() != "nan" and splitedAttr[1].lower() != "na" and splitedAttr[1].lower() != " nan" and splitedAttr[1].lower() != "none" and \
 									splitedAttr[1]:
-								dict[splitedAttr[0]] = splitedAttr[1]
+								attrDict[splitedAttr[0]] = splitedAttr[1]
 								
 						except Exception as err:
 							# dictionary data failed
-							errCounter += 1
-							
-							'''
-							print ''
-							print '******************* Error at %d *******************' % lineCounter
-							print line
-							print err
-							'''
 							print '*',
-							outLogFile.write('******************* Error at %d *******************\n\n%s\n\n%s\n\nattr: %s\n\ndata length: %d\n\n\n' % (lineCounter, line, err, attr, len(splitedAttr)))
+							errCounter += 1
+							if debugLogFile is not None:
+								debugLogFile.write('******************* Error at %d *******************\n\n%s\n\n%s\n\nattr: %s\n\ndata length: %d\n\n\n' % (lineCounter, line, err, attr, len(splitedAttr)))
 				
-				dictClass = ",".join("%s" % (k) for k in dict.keys())
-				dictValues = ",".join('"%s"' % (k) for k in dict.values())
-				
-				sqlquery = "INSERT INTO rawdata(%s) VALUES (%s) " % (dictClass, dictValues)
-				
+				PM25 = 0.0
 				try:
-					cursor.execute(sqlquery)
-					dataCounter += 1
-						
-				except Exception as err:
-					# SQL query exception
-					errCounter += 1
-
-					'''
-					print ''
-					print '------------------- Error at %d -------------------' % lineCounter
-					print line
-					print ''
-					print '>>', sqlquery
-					print ''
-					print dict
-					print ''
-					print err
-					'''
-					print '-',
-					outLogFile.write('------------------- Error at %d -------------------\n\n%s\n\n>> %s\n\n%s\n\n%s\n\n\n' % (lineCounter, line, sqlquery, dict, err))
+					if ('PM2_5' in attrDict):
+						PM25 = float(attrDict['PM2_5'])
+					if ('s_d0' in attrDict):
+						PM25 = float(attrDict['s_d0'])
+				except Exception :
+					pass
 					
-	conn.commit()
+				if( PM25 > 0.0 and \
+					'date' in attrDict and \
+					'time' in attrDict and \
+					'gps_lat' in attrDict and \
+					'gps_lon' in attrDict and \
+					attrDict['gps_lat'] != 0 and\
+					attrDict['gps_lon'] != 0):
+					
+					try:
+						logDateTime = datetime.datetime.strptime('%s %s' % (attrDict['date'], attrDict['time']), "%Y-%m-%d %H:%M:%S")
+						
+						CSV_FileName = '%s/%s.csv' % (csvFolderPath, attrDict['date'])
+						
+						# open CSV file
+						if (CSV_FileName in csvFileDict):
+							outCSVFile = csvFileDict[CSV_FileName]
+						else:
+							outCSVFile = open(CSV_FileName, 'w')
+							outCSVFile.write('latitude,longitude,pm25,timestamp\n')
+							csvFileDict[CSV_FileName] = outCSVFile
+
+						outCSVFile.write('%s,%s,%f,%s\n' % (attrDict['gps_lat'], attrDict['gps_lon'], PM25, logDateTime.strftime("%Y/%m/%d %H:%M")))
+						dataCounter += 1
+						
+					except Exception as err:
+						print '-',
+						errCounter += 1
+						if debugLogFile is not None:
+							debugLogFile.write('------------------- Error at %d -------------------\n\n%s\n\n%s\n\n\n' % (lineCounter, line, err))
+				
+				else :
+					filteredCounter += 1
+					if debugLogFile is not None:
+						missing = '';
+						
+						if PM25 <= 0.0:
+							missing = 'PM 2.5, '
+							
+						if 'gps_lat' not in attrDict or attrDict['gps_lat'] == 0:
+							missing = missing + 'gps_lat, '
+						
+						if 'gps_lon' not in attrDict or attrDict['gps_lon'] == 0:
+							missing = missing + 'gps_lon, '
+							
+						if 'date' not in attrDict:
+							missing = missing + 'date, '
+							
+						if 'time' not in attrDict:
+							missing = missing + 'time, '
+						
+						if 	missing != 'PM 2.5, ' and \
+							missing != 'PM 2.5, gps_lat, gps_lon, date, time, ' and \
+							missing != 'gps_lat, gps_lon, ' and \
+							missing != 'gps_lat, gps_lon, date, time, ':
+						
+							debugLogFile.write('------------------- Error at %d -------------------\n%s\nMissing Attr: %s\n\n\n' % (lineCounter, line, missing))
+				
 	elapsedTime  = time.time() - startTime
 	
 	print''
 	print''
-	print 'Lines:', lineCounter, ', Data:', dataCounter, ', Err:', errCounter, ', ElapsedTime:', elapsedTime
+	print 'Lines:', lineCounter, ', Data:', dataCounter, ', Err:', errCounter, ', Filtered:', filteredCounter, ', ElapsedTime:', elapsedTime
 	print''
-	outLogFile.write('Lines: %d, Data: %d, Err: %d, ElapsedTime: %lf\n\n\n\n' % (lineCounter, dataCounter, errCounter, elapsedTime))
 	
-conn.close()
-outLogFile.close()
-rawlogfile.close()
+	if debugLogFile is not None:
+		debugLogFile.write('Lines: %d, Data: %d, Err: %d, Filtered: %d, ElapsedTime: %lf\n\n\n\n' % (lineCounter, dataCounter, errCounter, filteredCounter,elapsedTime))
+	
+	rawlogfile.close()
+
+def main():
+	LOG_PATH = '../../data/pm25/logs'
+	CSV_PATH = '../../data/pm25/csvs'
+	debugLogFile = None
+	
+	if(len(sys.argv) >= 2 ):
+		LOG_PATH = sys.argv[1]
+		
+	if(len(sys.argv) >= 3) :
+		CSV_PATH = sys.argv[2]
+		
+	if(len(sys.argv) >= 4):
+		if sys.argv[3] == '-v':
+			DEBUG_LOG_FILENAME = 'preprocessor_log_%s.log' % (time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()))
+			debugLogFile = open(DEBUG_LOG_FILENAME, 'w')
+		
+	print 'Log path: "%s"' % LOG_PATH
+	print 'CSV path: "%s"' % CSV_PATH
+	if debugLogFile is not None:
+		print 'Debug log file: "%s"' % DEBUG_LOG_FILENAME
+	print ''
+	
+	logFileNames = glob.glob(
+		os.path.join(LOG_PATH, "*")
+	)
+	
+	for fileFullName in logFileNames:
+		preProcessLogFile(fileFullName, CSV_PATH, debugLogFile)
+	
+	if debugLogFile is not None:
+		debugLogFile.close()
+		
+if __name__ == "__main__":
+	main()
+	
+	for file in csvFileDict:
+		csvFileDict[file].close()
