@@ -18,7 +18,7 @@ import unicodecsv as csv
 
 
 FILE_NAMES=[]
-LOG_PATH = 'C:/Users/Ben/Desktop/power_data'
+LOG_PATH = './../../data/power/raw'
 FILE_NAMES = glob.glob(os.path.join(LOG_PATH, "*.txt"))
 
 with open('temp.csv', 'wb') as csvfile:
@@ -72,3 +72,24 @@ with open('temp.csv', 'wb') as csvfile:
                     #print powertype+","+name+","+capacity+","+netpowergen+","+percent+","+T
                     writer.writerow([powertype,name,capacity,netpowergen,percent,T])
             count+=1
+            
+FILE_NAMES = ["temp.csv" ]
+count=0
+for fileName in FILE_NAMES:
+    T = open(fileName,"r")
+    data = csv.reader(T)
+    with open("./../../data/power/raw.csv", 'wb') as csvfile:
+        writer = csv.writer(csvfile)
+        for row in data:
+            A = open('./../../data/power/address.csv',"r")
+            address = csv.reader(A)
+            find=0
+            for r in address:
+               if row[1]==r[0]:
+                   writer.writerow([row[1],r[2],r[3],row[4],row[5]])
+                   find=1
+            if find==0:
+                print(row[1])
+            A.close()
+    csvfile.close()
+    print("Complete")
