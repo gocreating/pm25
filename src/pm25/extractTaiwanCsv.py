@@ -46,5 +46,11 @@ def main():
             index=False,
             columns=OUTPUT_CSV_COLUMNS
         )
+        df.to_csv(
+            os.path.join(destDir, '../reducedCsvs.csv'),
+            mode='a',
+            index=False,
+            columns=OUTPUT_CSV_COLUMNS
+        )
 
 main()
