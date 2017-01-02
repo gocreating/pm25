@@ -92,7 +92,7 @@ We manually searched out the longitudes and latitudes of generators and merge th
 | timestamp | String | Timestamp with format `YYYY/MM/DD HH:mm`, and the `mm` part can only be `00`, `10`, `20`, `30`, `40` and `50` |
 
 ```
-$ python /src/power/relayMetrices.py r1=10 r2=60
+$ python /src/power/relayMetrices.py 10 60
 ```
 
 Calculate weight param metrices
