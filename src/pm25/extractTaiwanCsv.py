@@ -6,23 +6,17 @@ import pandas as pd
 import numpy as np
 
 DEFAULT_SRC_DIR = '../../data/pm25/csvs'
-DEFAULT_DEST_DIR = '../../data/pm25/reducedCsvs'
+DEFAULT_DEST = '../../data/pm25/reducedCsvs.csv'
 INPUT_CSV_COLUMNS = ['latitude', 'longitude', 'pm25', 'timestamp']
 OUTPUT_CSV_COLUMNS = ['latitude', 'longitude', 'pm25', 'timestamp']
 
 def main():
     srcDir = DEFAULT_SRC_DIR
-    destDir = DEFAULT_DEST_DIR
     if len(sys.argv) <= 1:
         logging.warning('missing source dir')
-    elif len(sys.argv) <= 2:
-        srcDir = sys.argv[1]
-        logging.warning('missing destination dir')
     else:
-        destDir = sys.argv[2]
-    logging.info(
-        'using source dir: %s, destination dir: %s' % (srcDir, destDir)
-    )
+        srcDir = sys.argv[1]
+    logging.info('using source dir: %s' % srcDir)
 
     filenames = glob.glob(os.path.join(srcDir, '*.csv'))
     for filename in filenames:
@@ -42,13 +36,9 @@ def main():
             (df['latitude'] < 25.711060) & (df['longitude'] < 122.567674)
         ]
         df.to_csv(
-            os.path.join(destDir, os.path.basename(filename)),
-            index=False,
-            columns=OUTPUT_CSV_COLUMNS
-        )
-        df.to_csv(
-            os.path.join(destDir, '../reducedCsvs.csv'),
+            os.path.join(DEFAULT_DEST),
             mode='a',
+            header=False,
             index=False,
             columns=OUTPUT_CSV_COLUMNS
         )
