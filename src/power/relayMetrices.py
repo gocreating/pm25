@@ -94,9 +94,32 @@ def main():
 
     i = 0
     for pm25Row in dfPm25.itertuples():
-        i = i + 1
         if i % 100 == 0:
             print i
+
+        if i % 10000 == 0:
+            dfR1Pm25Sum.to_csv(
+                os.path.join(DEFAULT_DEST_DIR, str(i) + '_dfR1Pm25Sum.csv'),
+                index=True,
+                header=dfPowerNameMap.name.values
+            )
+            dfR1WeightSum.to_csv(
+                os.path.join(DEFAULT_DEST_DIR, str(i) + '_dfR1WeightSum.csv'),
+                index=True,
+                header=dfPowerNameMap.name.values
+            )
+            dfR2Pm25Sum.to_csv(
+                os.path.join(DEFAULT_DEST_DIR, str(i) + '_dfR2Pm25Sum.csv'),
+                index=True,
+                header=dfPowerNameMap.name.values
+            )
+            dfR2WeightSum.to_csv(
+                os.path.join(DEFAULT_DEST_DIR, str(i) + '_dfR2WeightSum.csv'),
+                index=True,
+                header=dfPowerNameMap.name.values
+            )
+
+        i = i + 1
 
         j = 0
         for powerRow in dfPowerNameMap.itertuples():
