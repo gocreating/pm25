@@ -4,13 +4,12 @@ import logging
 import glob
 import os
 import pandas as pd
-from pandas.compat import u
 import numpy as np
 from math import radians, cos, sin, asin, sqrt
 
 DEFAULT_SRC_PM25 = '../../data/pm25/reducedCsvs.csv'
 DEFAULT_SRC_POWER_NAME_MAP = '../../data/power/nameMap.csv'
-DEFAULT_DEST_DIR = '../../data/lookupMetrices'
+DEFAULT_DEST_DIR = '../../data/relayMetrices'
 INPUT_PM25_CSV_COLUMNS = ['latitude', 'longitude', 'pm25', 'timestamp']
 INPUT_POWER_NAME_MAP_CSV_COLUMNS = ['name', 'latitude', 'longitude']
 OUTPUT_CSV_COLUMNS = ['latitude', 'longitude', 'pm25', 'timestamp']
@@ -94,18 +93,10 @@ def main():
     )
 
     i = 0
-    for pm25Row in dfPm25[0:50].itertuples():
+    for pm25Row in dfPm25.itertuples():
         i = i + 1
-        if i % 50 == 0:
+        if i % 100 == 0:
             print i
-            # print '==============dfR1Pm25Sum==================='
-            # print dfR1Pm25Sum
-            # print '==============dfR1WeightSum==============='
-            # print dfR1WeightSum
-            # print '==============dfR2Pm25Sum================='
-            # print dfR2Pm25Sum
-            # print '==============dfR2WeightSum=============='
-            # print dfR2WeightSum
 
         j = 0
         for powerRow in dfPowerNameMap.itertuples():

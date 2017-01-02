@@ -92,6 +92,12 @@ We manually searched out the longitudes and latitudes of generators and merge th
 | timestamp | String | Timestamp with format `YYYY/MM/DD HH:mm`, and the `mm` part can only be `00`, `10`, `20`, `30`, `40` and `50` |
 
 ```
+$ python /src/power/relayMetrices.py r1=10 r2=60
+```
+
+Calculate weight param metrices
+
+```
 $ python /src/power/populateGeneratorPm25.py [r1=0.1] [r2=0.5]
 ```
 
