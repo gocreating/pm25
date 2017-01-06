@@ -95,7 +95,12 @@ We manually searched out the longitudes and latitudes of generators and merge th
 $ python relayMetrices.py 10 60
 ```
 
-Calculate weight param metrices
+Calculate weight param metrices:
+
+- `/data/relayMetrices/dfR1Pm25Sum.csv`
+- `/data/relayMetrices/dfR1WeightSum.csv`
+- `/data/relayMetrices/dfR2Pm25Sum.csv`
+- `/data/relayMetrices/dfR2WeightSum.csv`
 
 ```
 $ python /src/power/populateGeneratorPm25.py [r1=0.1] [r2=0.5]
