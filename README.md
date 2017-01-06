@@ -145,13 +145,26 @@ Manually remove the following columns of `/data/pm25.csv`:
 
 Output the final result `/data/computed.csv`
 
-## Part 4. Analytics
+## Part 4. Result & Analytics
 
-### Usage
+以下將有效結果按照影響 PM 2.5 程度高到低排序列出發電廠:
 
-```
-/src $ python /src/compute.py
-```
+- 南部CC#1
+- 麥寮#2
+- 台中#8
+- 台中#7
+- 台中#4
+- 台中#10
+- 南部CC#3
+- 協和#3
+- 星彰#1
+- 台中#3
+- 星元#1
+- 台中#6
+- 協和#1
+- 國光#1
+- 翡翠#1
+- 台中#1
 
 ## Reference
 
