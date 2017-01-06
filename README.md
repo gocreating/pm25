@@ -96,7 +96,7 @@ We manually searched out the longitudes and latitudes of generators and merge th
 ### relayMetrices.py
 
 ```
-/src/power $ python relayMetrices.py 10 60
+/src/compute $ python relayMetrices.py 10 60
 ```
 
 Calculate weight param metrices with arguments `r1` and `r2`:
@@ -122,7 +122,7 @@ The format of these metrices is like following:
 ### populateGeneratorPm25.py
 
 ```
-/src/power $ python populateGeneratorPm25.py
+/src/compute $ python populateGeneratorPm25.py
 ```
 
 Remove meaningless power generator and from the above 4 metrices we can calculate weighted pm2.5 concentrations metrix `/data/pm25.csv` for each timestamp and for each power generator.
