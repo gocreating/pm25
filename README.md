@@ -127,6 +127,24 @@ The format of these metrices is like following:
 
 Remove meaningless power generator and from the above 4 metrices we can calculate weighted pm2.5 concentrations metrix `/data/pm25.csv` for each timestamp and for each power generator.
 
+### Manual Correction
+
+Manually remove the following columns of `/data/pm25.csv`:
+
+- `桂山發電廠`
+- `桂山發電廠.1`
+- `桂山發電廠.2`
+- `桂山發電廠.3`
+- `桂山發電廠.4`
+
+### compute.py
+
+```
+/src/compute $ python compute.py
+```
+
+Output the final result `/data/computed.csv`
+
 ## Part 4. Analytics
 
 ### Usage

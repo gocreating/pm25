@@ -31,9 +31,12 @@ def main():
         dfR2Pm25Sum.drop(columnsToDrop, inplace=True, axis=1)
         dfR2WeightSum.drop(columnsToDrop, inplace=True, axis=1)
 
+    # dfR1Pm25 = dfR1Pm25Sum / dfR1WeightSum
+    # dfR2Pm25 = dfR2Pm25Sum / dfR2WeightSum
+    # dfPm25 = dfR1Pm25 - dfR2Pm25
+
     dfR1Pm25 = dfR1Pm25Sum / dfR1WeightSum
-    dfR2Pm25 = dfR2Pm25Sum / dfR2WeightSum
-    dfPm25 = dfR1Pm25 - dfR2Pm25
+    dfPm25 = dfR1Pm25
 
     dfPm25.to_csv(
         DEST,
