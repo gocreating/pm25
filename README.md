@@ -91,41 +91,43 @@ We manually searched out the longitudes and latitudes of generators and merge th
 | load | Float | The working load of generators in percentage |
 | timestamp | String | Timestamp with format `YYYY/MM/DD HH:mm`, and the `mm` part can only be `00`, `10`, `20`, `30`, `40` and `50` |
 
+## Part 3. Compute
+
+### relayMetrices.py
+
 ```
-$ python relayMetrices.py 10 60
+/src/power $ python relayMetrices.py 10 60
 ```
 
-Calculate weight param metrices:
+Calculate weight param metrices with arguments `r1` and `r2`:
 
 - `/data/relayMetrices/dfR1Pm25Sum.csv`
 - `/data/relayMetrices/dfR1WeightSum.csv`
 - `/data/relayMetrices/dfR2Pm25Sum.csv`
 - `/data/relayMetrices/dfR2WeightSum.csv`
 
-```
-$ python /src/power/populateGeneratorPm25.py [r1=0.1] [r2=0.5]
-```
+> ### Note
+> This step will take several days!
 
-Calculate weighted pm2.5 concentrations Gaussian distribution model.
+The format of these metrices is like following:
 
-| Field  | Data Type | Description
-| --- | --- | --- |
-| name | String | The identifier of generators |
-| load | Float | The working load of generators in percentage |
-| pm25InR1 | Float | weighted pm25 concentration inside radius R1
-| pm25InR2 | Float | weighted pm25 concentration inside radius R2
-| pm25Computed | Float | pm25InR2 - pm25InR1
-| timestamp | String | Timestamp with format `YYYY/MM/DD HH:mm`, and the `mm` part can only be `00`, `10`, `20`, `30`, `40` and `50` |
+| | 協和#1 | 台中#1 | ... | 星元#1 | 嘉惠#1 |
+| --- | --- | --- | --- | --- | --- |
+| 2016/12/17 00:00 | -21.65610874 | -21.65610874 | ... | 3.502609225 | 0.704510358 |
+| 2016/12/17 00:10 | -18.59080956 | -18.59080956 | ... | 2.18297131 | 0.697338471 |
+| ... | ... | ... | ... | ... | ... |
+| 2016/12/23 23:40 | -9.457467469 | -9.457467469 | ... | -1.206004589 | 8.70393683 |
+| 2016/12/23 23:50 | -9.251565115 | -9.251565115 | ... | -0.77633429 | 10.38556501 |
 
-## Part 3. Algorithm
+### populateGeneratorPm25.py
 
 ```
-file = OPEN('path/to/output')
-FOR EACH name IN generator:
-  model = LinearRegression.train(load, pm25Computed)
-  influence = model.slope
-  file.write(name, influence)
+/src/power $ python populateGeneratorPm25.py
 ```
+
+Remove meaningless power generator and from the above 4 metrices we can calculate weighted pm2.5 concentrations metrix `/data/pm25.csv` for each timestamp and for each power generator.
+
+## Part 4. Analytics
 
 ### Usage
 
